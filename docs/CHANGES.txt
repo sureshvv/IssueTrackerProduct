@@ -4,7 +4,7 @@ Changelog
 0.14.3 (unreleased)
 -------------------
 
-- Nothing changed yet.
+- Make OpenID component work [sureshvv]
 
 
 0.14.2 (2013-07-21)
