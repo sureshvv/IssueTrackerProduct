@@ -18,7 +18,7 @@ from base64 import encodestring, decodestring
 
 from DateTime import DateTime
 import transaction
-from Products.CookieCrumbler.CookieCrumbler import CookieCrumbler
+from CookieCrumbler import CookieCrumbler
 from Products.PageTemplates.PageTemplateFile import PageTemplateFile
 from AccessControl import ClassSecurityInfo, getSecurityManager
 from AccessControl.SecurityManagement import newSecurityManager
@@ -31,9 +31,9 @@ except ImportError:
     # < Zope 2.12
     from Globals import InitializeClass
 
-from Products.IssueTrackerProduct.Constants import UNICODE_ENCODING
+from IssueTrackerProduct.Constants import UNICODE_ENCODING
 
-from Products.IssueTrackerProduct.TemplateAdder import addTemplates2Class as AT2C
+from IssueTrackerProduct.TemplateAdder import addTemplates2Class as AT2C
 def addTemplates2Class(klass, templates, optimize=None):
     AT2C(klass, templates, optimize, Globals=globals())
         

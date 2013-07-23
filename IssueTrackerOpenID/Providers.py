@@ -1,7 +1,7 @@
 import os
 from Products.PageTemplates.PageTemplateFile import PageTemplateFile
 from OFS.Folder import Folder
-from Products.IssueTrackerProduct.Constants import UNICODE_ENCODING
+from IssueTrackerProduct.Constants import UNICODE_ENCODING
 
 manage_addIssueTrackerOpenIDProviderForm = \
   PageTemplateFile('zpt/addIssueTrackerOpenIDProviderForm', globals())

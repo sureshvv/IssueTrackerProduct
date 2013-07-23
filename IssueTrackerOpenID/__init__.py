@@ -9,7 +9,7 @@ import os
 import OFS
 import OpenID
 import Providers
-from Products.IssueTrackerProduct import _registerIcon
+from IssueTrackerProduct import _registerIcon
 
 def initialize(context):
     context.registerClass(
