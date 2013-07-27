@@ -98,6 +98,7 @@ from zLOG import LOG, ERROR
 from App.Common import package_home
 from ZPublisher.HTTPRequest import HTTPRequest
 from OFS.DTMLMethod import addDTMLMethod
+from zExceptions import Redirect
 
 # Constants.
 ATTEMPT_DISABLED = -1
@@ -257,7 +258,7 @@ class CookieCrumbler (SimpleItemWithProperties):
     def unauthorized(self):
         url = self.getLoginURL()
         if url:
-            raise 'Redirect', url
+            raise Redirect, url
         # Use the standard unauthorized() call.
         resp = self._cleanupResponse()
         resp.unauthorized()

@@ -107,12 +107,12 @@ class SimpleItemWithProperties (PropertyManager, SimpleItem):
         'manage_changePropertyTypes',
         )
 
-    def manage_propertiesForm(self, REQUEST, *args, **kw):
-        'An override that makes the schema fixed.'
-        my_kw = kw.copy()
-        my_kw['property_extensible_schema__'] = 0
-        return apply(PropertyManager.manage_propertiesForm,
-                     (self, self, REQUEST,) + args, my_kw)
+    #def manage_propertiesForm(self, REQUEST, *args, **kw):
+    #    'An override that makes the schema fixed.'
+    #    my_kw = kw.copy()
+    #    my_kw['property_extensible_schema__'] = 0
+    #    return apply(PropertyManager.manage_propertiesForm,
+    #                 (self, self, REQUEST,) + args, my_kw)
 
     security.declarePublic('propertyLabel')
     def propertyLabel(self, id):

@@ -8,8 +8,8 @@
                  username python:modules['AccessControl'].getSecurityManager().getUser()">
 
 <div tal:condition="python:str(username).lower() == 'anonymous user'">
- <!-- Redirect or generate an unauthorized response -->
- <br tal:define="dummy python:request['RESPONSE'].unauthorized()" />
+ <!-- Redirect or generate an unauthorized response >
+ <br tal:define="dummy python:request['RESPONSE'].unauthorized()" / -->
 
  <h3>Login failed</h3>
  <p>Please <a href="login_form?came_from=&dtml.url_quote-came_from;"

@@ -7,14 +7,14 @@ manage_addIssueTrackerOpenIDProviderForm = \
   PageTemplateFile('zpt/addIssueTrackerOpenIDProviderForm', globals())
 
 def manage_addIssueTrackerOpenIDProvider(dispatcher, oid, url, title=u'', 
-                                         icon=None, REQUEST=None):
+                                         disabled=False, icon=None, REQUEST=None):
     """Create and OpenID authenticator"""
     dest = dispatcher.Destination()
     
     if isinstance(title, str):
         title = unicode(title, UNICODE_ENCODING)
     
-    provider = IssueTrackerOpenIDProvider(oid, url, title.strip())
+    provider = IssueTrackerOpenIDProvider(oid, url, title.strip(), disabled=disabled)
     dest._setObject(oid, provider)
     
     instance = dest._getOb(oid)

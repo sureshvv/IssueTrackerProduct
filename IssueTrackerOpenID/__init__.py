@@ -8,7 +8,7 @@
 import os
 import OFS
 import OpenID
-import Providers
+import Providers, CookieCrumbler
 from IssueTrackerProduct import _registerIcon
 
 def initialize(context):
@@ -24,6 +24,13 @@ def initialize(context):
         constructors=(Providers.manage_addIssueTrackerOpenIDProviderForm,
                       Providers.manage_addIssueTrackerOpenIDProvider),
         #icon='www/openid_icon.png',
+        )    
+    
+    context.registerClass(
+        CookieCrumbler.CookieCrumbler,
+        constructors=(CookieCrumbler.manage_addCCForm,
+                      CookieCrumbler.manage_addCC),
+        icon='cookie.gif',
         )    
     
     def registerIcon(filename, **kw):

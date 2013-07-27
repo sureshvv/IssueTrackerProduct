@@ -52,12 +52,13 @@ def manage_addIssueTrackerOpenID(dispatcher, oid, title=u'OpenID Authentication'
                                  create_default_providers=True,
                                  REQUEST=None):
     """Create and OpenID authenticator"""
-    dest = dispatcher.Destination()
+    dest = dispatcher
     
     if isinstance(title, str):
         title = unicode(title, UNICODE_ENCODING)
     
     issuetracker_openid = IssueTrackerOpenID(oid, title.strip())
+    issuetracker_openid.id = oid
     dest._setObject(oid, issuetracker_openid)
     instance = dest._getOb(oid)
     
@@ -247,7 +248,7 @@ class IssueTrackerOpenID(CookieCrumbler):
         for parameter in parameters:
             if parameter not in qs_parsed:
                 qs_parsed[parameter] = [parameters[parameter]]
-        #pprint(qs_parsed)
+        pprint(qs_parsed)
         qs = urlencode(qs_parsed, True)
         url = url.split('?')[0] + '?' + qs
             
@@ -262,14 +263,14 @@ class IssueTrackerOpenID(CookieCrumbler):
     def authenticate(self, REQUEST):
         """called back"""
         creds = self._extractOpenIdServerResponse(REQUEST)
-        #print "CREDS"
-        #pprint(creds)
+        print "CREDS"
+        pprint(creds)
         identity = self._authenticateCredentials(creds)
         if not identity:
             return REQUEST.RESPONSE.redirect(self.absolute_url()+'/authentication_failed')
         
-        #print "IDENTITY"
-        #pprint(identity)
+        print "IDENTITY"
+        pprint(identity)
         
         email = creds.get('openid.ext1.value.email',
                         creds.get('openid.ax.value.email',
@@ -478,7 +479,6 @@ class IssueTrackerOpenID(CookieCrumbler):
         security_context_path = '/'.join(self.REQUEST.PARENTS[0].getPhysicalPath())
         self.REQUEST.SESSION['cc_security_context_path'] = security_context_path
 
-    
     
 zpts = ('zpt/header_footer',
         'zpt/logged_out',

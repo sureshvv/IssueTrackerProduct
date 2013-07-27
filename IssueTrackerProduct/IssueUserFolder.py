@@ -84,7 +84,7 @@ def manage_addIssueUserFolder(self, title='', webmaster_email='',
                 raise "IllegalValue", 'Illegal domain specification'
 
             userfolder._doAddUser(username, password, roles, domains,
-                                  email=email,
+                                  email=email, parent=userfolder,
                                   fullname=fullname)
                                   
     if REQUEST:
@@ -283,6 +283,7 @@ class IssueUserFolder(User.UserFolder):
                         fullname=REQUEST['fullname'],
                         must_change_password=REQUEST.get('must_change_password', False),
                         display_format=REQUEST.get('display_format',''),
+                        parent=self
                         )
         if REQUEST: return self._mainUser(self, REQUEST)
 
@@ -371,12 +372,14 @@ class IssueUserFolder(User.UserFolder):
         email=kw['email']
         fullname=kw['fullname']
         timezone=kw.get('timezone', 'UTC')
+        parent=kw.get('parent', None)
         must_change_password=kw.get('must_change_password',False)
         display_format = kw.get('display_format','')
         if password is not None and self.encrypt_passwords:
             password = self._encryptPassword(password)
         self.data[name]=IssueUser(name, password, roles, domains,
-                                  email, fullname, timezone, must_change_password,
+                                  email, fullname, timezone, parent,
+                                  must_change_password,
                                   display_format)
 
     def _doChangeUser(self, name, password, roles, domains, **kw):
@@ -569,7 +572,8 @@ class IssueUser(User.SimpleUser, Persistent):
     misc_properties = {} # backwardcompatability
     
     def __init__(self, name, password, roles, domains,
-                 email, fullname, timezone, must_change_password=False,
+                 email, fullname, timezone, parent,
+                 must_change_password=False,
                  display_format='', use_accesskeys=False,
                  remember_savedfilter_persistently=False,
                  show_nextactions=False):
@@ -581,6 +585,7 @@ class IssueUser(User.SimpleUser, Persistent):
         self.email = email
         self.fullname = fullname
         self.timezone = timezone
+        self.parent = parent
         self.must_change_password = must_change_password
         self.display_format = display_format
         self.use_accesskeys = use_accesskeys
@@ -595,7 +600,7 @@ class IssueUser(User.SimpleUser, Persistent):
 
     def getIssueUserPath(self):
         """ return the absolute real path of this object parent """
-        return '/'.join(self.getPhysicalPath())
+        return '/'.join(self.parent.getPhysicalPath())
 
     def getIssueUserIdentifier(self):
         """ return the parents physical path and username """
