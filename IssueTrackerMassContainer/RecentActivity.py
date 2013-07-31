@@ -4,8 +4,8 @@ from pprint import pprint
 from DateTime import DateTime
 
 from Products.PythonScripts.standard import html_quote
-from Products.IssueTrackerProduct.Constants import ISSUETRACKER_METATYPE, ISSUE_METATYPE, ISSUETHREAD_METATYPE
-from Products.IssueTrackerMassContainer.Constants import MASSCONTAINER_METATYPE
+from IssueTrackerProduct.Constants import ISSUETRACKER_METATYPE, ISSUE_METATYPE, ISSUETHREAD_METATYPE
+from IssueTrackerMassContainer.Constants import MASSCONTAINER_METATYPE
 
 ## Private stuff ###############################################################
 

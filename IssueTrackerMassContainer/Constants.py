@@ -1,7 +1,7 @@
 # Peter Bengtsson <mail@peterbe.com>
 # Constants for IssueTrackerMassContainer
 #
-from Products.IssueTrackerProduct.Constants import getEnvStr
+from IssueTrackerProduct.Constants import getEnvStr
 
 # constants
 ICON_LOCATION = 'misc_/IssueTrackerMassContainer'

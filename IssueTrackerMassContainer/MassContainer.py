@@ -31,7 +31,7 @@ from Products.PythonScripts.PythonScript import PythonScript
 from Products.PythonScripts.standard import url_quote
 from zLOG import LOG, INFO
 
-from Products.IssueTrackerProduct.Constants import ISSUE_METATYPE
+from IssueTrackerProduct.Constants import ISSUE_METATYPE
 
 # product
 from Constants import *

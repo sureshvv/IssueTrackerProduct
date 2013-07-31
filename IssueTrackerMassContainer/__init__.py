@@ -4,13 +4,12 @@ from zLOG import LOG, WARNING, ERROR
 import MassContainer
 """IssueTrackerMassContainer Product"""
 
+from Constants import *
+
 try:
-    from Products import IssueTrackerProduct
     DO_INITIALIZE = True
-    from Products.IssueTrackerProduct import BetterImageFile
-    from Products.IssueTrackerProduct.Constants import OPTIMIZE
-    from Constants import *
-    
+    from IssueTrackerProduct import BetterImageFile
+    from IssueTrackerProduct.Constants import OPTIMIZE
 except:
     LOG(MASSCONTAINER_METATYPE, WARNING,
         'IssueTrackerProduct not install', '')
