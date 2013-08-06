@@ -1,0 +1,9 @@
+
+<dtml-if expr="_.SecurityGetUser().getUserName() == 'Anonymous User'">
+ <h3>Logged out</h3>
+ <p>Come again soon!</p>
+<dtml-else>
+ You are logged in using HTTP authentication.  You may need to
+ <a href="/manage_zmi_logout">log out of the Zope management interface</a>.
+</dtml-if>
+

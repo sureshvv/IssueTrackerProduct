@@ -225,7 +225,10 @@ manage_addIssueTrackerForm = PTF('zpt/addIssueTrackerForm', globals())
 
 def manage_addIssueTracker(dispatcher, id, title='', REQUEST=None):
     """ add IssueTracker instance via the web """
-    dest = dispatcher.Destination()
+    try:
+        dest = dispatcher.Destination()
+    except AttributeError:
+        dest = dispatcher
     issuetracker = IssueTracker(id, title.strip(),
                                 sitemaster_name=title)
     dest._setObject(id, issuetracker)
@@ -6488,44 +6491,6 @@ class IssueTracker(IssueTrackerFolderBase, CatalogAware,
         # still here!
         return False
 
-    def delRequestVar(self, req, name):
-        try: del req.other[name]
-        except: pass
-        try: del req.form[name]
-        except: pass
-        try: del req.cookies[name]
-        except: pass
-        try: del req.environ[name]
-        except: pass
-
-    security.declarePrivate('modifyRequest')
-    def modifyRequest(self, req, resp):
-        # Returns flags indicating what the user is trying to do.
-
-        if req.__class__ is not HTTPRequest:
-            return ATTEMPT_DISABLED
-
-        if not req[ 'REQUEST_METHOD' ] in ( 'GET', 'PUT', 'POST' ):
-            return ATTEMPT_DISABLED
-
-        if not req._auth and req.has_key(self.auth_cookie):
-            # Copy __ac to the auth header.
-            ac = unquote(req[self.auth_cookie])
-            req._auth = 'basic %s' % ac
-            resp._auth = 1
-            self.delRequestVar(req, self.auth_cookie)
-            return ATTEMPT_CONT
-
-        return ATTEMPT_NONE
-
-    def __before_publishing_traverse__(self, container, req):
-        '''The __before_publishing_traverse__ hook.'''
-        if not self.REQUEST._auth and self.REQUEST.has_key(self.auth_cookie):
-            resp = self.REQUEST['RESPONSE']
-            self.modifyRequest(req, resp)
-
-    ## Helpers to templates
-
     def getHeader(self):
         """ Return which METAL header&footer to use """
         # if openid is present and is anon user, redirect to
@@ -11462,7 +11427,6 @@ class IssueTracker(IssueTrackerFolderBase, CatalogAware,
 
     def getIssueUser(self):
         """ use REQUEST to get the IssueUser object or None """
-        #import pdb; pdb.set_trace()
         try:
             user = self.acl_users.identify(self.REQUEST._auth)[0]
             user = self.acl_users.getUserById(user)
