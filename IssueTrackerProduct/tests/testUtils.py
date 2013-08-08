@@ -5,7 +5,7 @@ if __name__ == '__main__':
     execfile(os.path.join(sys.path[0], 'framework.py'))
         
 
-from Products.IssueTrackerProduct import Utils
+from IssueTrackerProduct import Utils
 from DateTime import DateTime
 
 class IssueLinkFinderTestCase(unittest.TestCase):

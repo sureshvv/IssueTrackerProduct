@@ -3422,7 +3422,7 @@ class IssueTrackerIssue(IssueTracker, CustomFieldsIssueBase):
                                 meta_type=ISSUENOTE_METATYPE,
                                 use_stored_counter=False)
 
-        from Products.IssueTrackerProduct.Note import IssueNote
+        from IssueTrackerProduct.Note import IssueNote
         # create a note inside this issue
         note = IssueNote(genid, title, comment, fromname, email,
                          display_format=display_format,

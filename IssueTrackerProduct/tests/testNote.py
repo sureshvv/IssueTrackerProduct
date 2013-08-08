@@ -43,7 +43,7 @@ class NoteTestCase(TestBase):
         tracker.SubmitIssue(request)
         issue = tracker.getIssueObjects()[0]
         
-        from Products.IssueTrackerProduct.Note import IssueNote
+        from IssueTrackerProduct.Note import IssueNote
         # create a note inside this issue
         note = IssueNote('1', u'A note about something',
                          u"Some note about something which is a long string",

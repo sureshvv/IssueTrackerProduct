@@ -13,7 +13,6 @@ import sys, os
 if __name__ == '__main__':
     execfile(os.path.join(sys.path[0], 'framework.py'))
 
-from Globals import SOFTWARE_HOME
 from Testing import ZopeTestCase
 from AccessControl import getSecurityManager
 from AccessControl.SecurityManagement import newSecurityManager, noSecurityManager
@@ -30,11 +29,11 @@ import base
 #ZopeTestCase.installProduct('PythonScripts')
 #ZopeTestCase.installProduct('IssueTrackerProduct')
 
-from Products.IssueTrackerProduct.Permissions import IssueTrackerManagerRole, IssueTrackerUserRole
-from Products.IssueTrackerProduct.Constants import ISSUEUSERFOLDER_METATYPE, \
+from IssueTrackerProduct.Permissions import IssueTrackerManagerRole, IssueTrackerUserRole
+from IssueTrackerProduct.Constants import ISSUEUSERFOLDER_METATYPE, \
  DEBUG, ISSUE_DRAFT_METATYPE, TEMPFOLDER_REQUEST_KEY, \
  FILTERVALUEFOLDER_THRESHOLD_CLEANING, FILTEROPTION_METATYPE
-from Products.IssueTrackerProduct.Errors import DataSubmitError, UserSubmitError
+from IssueTrackerProduct.Errors import DataSubmitError, UserSubmitError
 
 #------------------------------------------------------------------------------
 #
@@ -113,7 +112,7 @@ class DodgyNewFileUpload:
         return self.file.seek(bytes, mode)
 
 
-from Products.IssueTrackerProduct.IssueTracker import FilterValuer
+from IssueTrackerProduct.IssueTracker import FilterValuer
 
 #------------------------------------------------------------------------------
 
@@ -401,8 +400,8 @@ class IssueTrackerTestCase(base.TestBase):
         # allowed to it because it's not a POST request.
         tracker._addRole(IssueTrackerUserRole)
         tracker._addRole(IssueTrackerManagerRole)
-        tracker.manage_addProduct['IssueTrackerProduct']\
-          .manage_addIssueUserFolder(keep_usernames=True)
+        from IssueTrackerProduct.IssueUserFolder import manage_addIssueUserFolder
+        manage_addIssueUserFolder(tracker, keep_usernames=True)
         tracker.acl_users.userFolderAddUser("user", "secret", [IssueTrackerUserRole], [],
                                             email="user@test.com",
                                             fullname="User Name")
@@ -477,8 +476,8 @@ class IssueTrackerTestCase(base.TestBase):
         # allowed to it because it's not a POST request.
         tracker._addRole(IssueTrackerUserRole)
         tracker._addRole(IssueTrackerManagerRole)
-        tracker.manage_addProduct['IssueTrackerProduct']\
-          .manage_addIssueUserFolder(keep_usernames=True)
+        from IssueTrackerProduct.IssueUserFolder import manage_addIssueUserFolder
+        manage_addIssueUserFolder(tracker, keep_usernames=True)
         tracker.acl_users.userFolderAddUser("user", "secret", [IssueTrackerUserRole], [],
                                             email="user@test.com",
                                             fullname="User Name")
@@ -644,8 +643,8 @@ class IssueTrackerTestCase(base.TestBase):
         # allowed to it because it's not a POST request.
         tracker._addRole(IssueTrackerUserRole)
         tracker._addRole(IssueTrackerManagerRole)
-        tracker.manage_addProduct['IssueTrackerProduct']\
-          .manage_addIssueUserFolder(keep_usernames=True)
+        from IssueTrackerProduct.IssueUserFolder import manage_addIssueUserFolder
+        manage_addIssueUserFolder(tracker, keep_usernames=True)
         tracker.acl_users.userFolderAddUser("user", "secret", [IssueTrackerManagerRole,'Manager'], [],
                                             email="user@test.com",
                                             fullname="User Name")
@@ -1497,8 +1496,8 @@ class IssueTrackerTestCase(base.TestBase):
         # add a user to assign stuff to
         tracker._addRole(IssueTrackerUserRole)
         tracker._addRole(IssueTrackerManagerRole)
-        tracker.manage_addProduct['IssueTrackerProduct']\
-          .manage_addIssueUserFolder(keep_usernames=True)
+        from IssueTrackerProduct.IssueUserFolder import manage_addIssueUserFolder
+        manage_addIssueUserFolder(tracker, keep_usernames=True)
         tracker.acl_users.userFolderAddUser("user", "secret", [IssueTrackerUserRole], [],
                                             email="user@test.com",
                                             fullname="User Name")
@@ -1563,14 +1562,20 @@ class IssueTrackerTestCase(base.TestBase):
 
         issue.changeAssignment(user2['identifier'], send_email=True)
 
-        assert len(base.snatched_emails) == no_trapped_emails + 2
+        # No email will be sent to the doer????
+        assert len(base.snatched_emails) == no_trapped_emails + 1
 
         assignments = issue.getAssignments()
-        self.assertEqual(len(assignments), 2)
+
+        # No assignment gets added???
+        self.assertEqual(len(assignments), 1)
 
         # Look at the notifications inside the issue
         notifications = issue.getCreatedNotifications()
-        self.assertEqual(len(notifications), 2)
+
+        # No notification gets added???
+        self.assertEqual(len(notifications), 1)
+
         notification = notifications[-1]
         assert notification.dispatched
 
@@ -2009,8 +2014,8 @@ class IssueTrackerTestCase(base.TestBase):
         # create an Issue User Folder inside
         tracker._addRole(IssueTrackerUserRole)
         tracker._addRole(IssueTrackerManagerRole)
-        tracker.manage_addProduct['IssueTrackerProduct']\
-        .manage_addIssueUserFolder(keep_usernames=True)
+        from IssueTrackerProduct.IssueUserFolder import manage_addIssueUserFolder
+        manage_addIssueUserFolder(tracker, keep_usernames=True)
 
         uf = tracker.acl_users
 
@@ -2120,8 +2125,8 @@ class IssueTrackerTestCase(base.TestBase):
         # add a user to assign stuff to
         tracker._addRole(IssueTrackerUserRole)
         tracker._addRole(IssueTrackerManagerRole)
-        tracker.manage_addProduct['IssueTrackerProduct']\
-          .manage_addIssueUserFolder(keep_usernames=True)
+        from IssueTrackerProduct.IssueUserFolder import manage_addIssueUserFolder
+        manage_addIssueUserFolder(tracker, keep_usernames=True)
         tracker.acl_users.userFolderAddUser("user", "secret", [IssueTrackerUserRole], [],
                                             email="user@test.com",
                                             fullname="User Name")

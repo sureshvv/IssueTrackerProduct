@@ -10,7 +10,7 @@ import stat
 if __name__ == '__main__':
     execfile(os.path.join(sys.path[0], 'framework.py'))
 
-from base import TestBase
+from base import TestBase, snatched_emails
 
 #------------------------------------------------------------------------------
 #
@@ -168,7 +168,7 @@ class EmailInTestCase(TestBase):
         FakePOP3.files = [abs_path('email-in-1.email')]
 
         # Monkey patch!
-        from Products.IssueTrackerProduct import IssueTracker
+        from IssueTrackerProduct import IssueTracker
         IssueTracker.POP3 = FakePOP3
 
         result = tracker.check4MailIssues(verbose=True)
@@ -190,7 +190,7 @@ class EmailInTestCase(TestBase):
                           abs_path('email-in-2_with-autoreply.email')]
 
         # Monkey patch!
-        from Products.IssueTrackerProduct import IssueTracker
+        from IssueTrackerProduct import IssueTracker
         IssueTracker.POP3 = FakePOP3
 
         result = tracker.check4MailIssues(verbose=True)
@@ -216,7 +216,7 @@ class EmailInTestCase(TestBase):
                           abs_path('email-in-2.email')]
 
         # Monkey patch!
-        from Products.IssueTrackerProduct import IssueTracker
+        from IssueTrackerProduct import IssueTracker
         IssueTracker.POP3 = FakePOP3
 
         result = tracker.check4MailIssues(verbose=True)
@@ -239,7 +239,7 @@ class EmailInTestCase(TestBase):
         FakePOP3.files = [abs_path('email-in-3.email'),]
 
         # Monkey patch!
-        from Products.IssueTrackerProduct import IssueTracker
+        from IssueTrackerProduct import IssueTracker
         IssueTracker.POP3 = FakePOP3
         
         result = tracker.check4MailIssues(verbose=True)
@@ -267,7 +267,7 @@ class EmailInTestCase(TestBase):
         FakePOP3.files = [abs_path('email-in-4.email'),]
 
         # Monkey patch!
-        from Products.IssueTrackerProduct import IssueTracker
+        from IssueTrackerProduct import IssueTracker
         IssueTracker.POP3 = FakePOP3
         
         result = tracker.check4MailIssues(verbose=True)
@@ -308,7 +308,7 @@ class EmailInTestCase(TestBase):
         FakePOP3.files = [abs_path('email-in-6.email'),]
 
         # Monkey patch!
-        from Products.IssueTrackerProduct import IssueTracker
+        from IssueTrackerProduct import IssueTracker
         IssueTracker.POP3 = FakePOP3
         
         result = tracker.check4MailIssues(verbose=True)
@@ -340,7 +340,7 @@ class EmailInTestCase(TestBase):
         FakePOP3.files = [abs_path('email-in-7.email'),]
 
         # Monkey patch!
-        from Products.IssueTrackerProduct import IssueTracker
+        from IssueTrackerProduct import IssueTracker
         IssueTracker.POP3 = FakePOP3
         
         result = tracker.check4MailIssues(verbose=True)
@@ -366,12 +366,12 @@ class EmailInTestCase(TestBase):
         FakePOP3.files = [abs_path('email-in-8.email'),]
 
         # Monkey patch!
-        from Products.IssueTrackerProduct import IssueTracker
+        from IssueTrackerProduct import IssueTracker
         IssueTracker.POP3 = FakePOP3
         
         result = tracker.check4MailIssues(verbose=True)
         
-        receipt = self.snatched_emails[0]
+        receipt = snatched_emails[0]
         
         self.assertEqual(receipt['to'], 'Mr Exception <special@peterbe.com>')
         self.assertTrue(receipt['subject'].count(tracker.getTitle()))
@@ -388,7 +388,7 @@ class EmailInTestCase(TestBase):
         
         assert len(tracker.getIssueObjects()) == 2
         issue2 = tracker.getIssueObjects()[1]
-        receipt = self.snatched_emails[1]
+        receipt = snatched_emails[1]
         self.assertTrue(receipt['msg'].count(issue2.absolute_url()))
         
         
@@ -408,7 +408,7 @@ class EmailInTestCase(TestBase):
         FakePOP3.files = [abs_path('email-in-9.email'),]
 
         # Monkey patch!
-        from Products.IssueTrackerProduct import IssueTracker
+        from IssueTrackerProduct import IssueTracker
         IssueTracker.POP3 = FakePOP3
         
         result = tracker.check4MailIssues(verbose=True)
@@ -464,7 +464,7 @@ class EmailInTestCase(TestBase):
         FakePOP3.files = [abs_path(x) for x in email_filenames]
 
         # Monkey patch!
-        from Products.IssueTrackerProduct import IssueTracker
+        from IssueTrackerProduct import IssueTracker
         IssueTracker.POP3 = FakePOP3        
 
         
@@ -484,7 +484,7 @@ class EmailInTestCase(TestBase):
         FakePOP3.files = [abs_path('jp-0.email'), abs_path('jp-1.email')]
 
         # Monkey patch!
-        from Products.IssueTrackerProduct import IssueTracker
+        from IssueTrackerProduct import IssueTracker
         IssueTracker.POP3 = FakePOP3
         
         result = tracker.check4MailIssues(verbose=True)
@@ -548,7 +548,7 @@ class EmailInTestCase(TestBase):
         FakePOP3.files = [abs_path('no-general.email')]
 
         # Monkey patch!
-        from Products.IssueTrackerProduct import IssueTracker
+        from IssueTrackerProduct import IssueTracker
         IssueTracker.POP3 = FakePOP3
         
         result = tracker.check4MailIssues(verbose=True)

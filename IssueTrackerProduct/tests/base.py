@@ -33,8 +33,8 @@ class TestBase(ZopeTestCase.ZopeTestCase):
 
     def afterSetUp(self):
         # install an issue tracker
-        dispatcher = self.folder.manage_addProduct['IssueTrackerProduct']
-        dispatcher.manage_addIssueTracker('tracker', 'Issue Tracker')
+        from IssueTrackerProduct.IssueTracker import manage_addIssueTracker
+        manage_addIssueTracker(self.folder, 'tracker', 'Issue Tracker')
 
         # install an error_log
         dispatcher = self.folder.manage_addProduct['SiteErrorLog']
@@ -54,7 +54,7 @@ class TestBase(ZopeTestCase.ZopeTestCase):
         # The reasons for this one is that we don't want Zope to have execute
         # Issue.manage_beforeDelete() every time it tears down the setup after
         # each test.
-        from Products.IssueTrackerProduct.Issue import IssueTrackerIssue
+        from IssueTrackerProduct.Issue import IssueTrackerIssue
         IssueTrackerIssue.manage_beforeDelete = void_manage_beforeDelete
 
 
@@ -78,8 +78,8 @@ def fake_sendEmail(msg, to, fr, subject, **kw):
 
 
 
-from Products.IssueTrackerProduct.IssueTracker import IssueTracker
-from Products.IssueTrackerProduct.Issue import IssueTrackerIssue
+from IssueTrackerProduct.IssueTracker import IssueTracker
+from IssueTrackerProduct.Issue import IssueTrackerIssue
 
 def functional_fake_sendEmail(self, msg, to, fr, subject, **kw):
     return fake_sendEmail(msg, to, fr, subject, **kw)

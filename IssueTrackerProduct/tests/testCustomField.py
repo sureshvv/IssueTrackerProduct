@@ -12,7 +12,6 @@ import stat
 if __name__ == '__main__':
     execfile(os.path.join(sys.path[0], 'framework.py'))
 
-from Globals import SOFTWARE_HOME    
 from Testing import ZopeTestCase
 from AccessControl import getSecurityManager
 from AccessControl.SecurityManagement import newSecurityManager
@@ -66,8 +65,9 @@ class TestBase(ZopeTestCase.ZopeTestCase):
     
     def afterSetUp(self):
         # install an issue tracker
-        dispatcher = self.folder.manage_addProduct['IssueTrackerProduct']
-        dispatcher.manage_addIssueTracker('tracker', 'Issue Tracker')
+        from IssueTrackerProduct.IssueTracker import manage_addIssueTracker
+        from IssueTrackerProduct import UnicodeSplitter
+        manage_addIssueTracker(self.folder, 'tracker', 'Issue Tracker')
         
         # install an error_log
         #dispatcher = self.folder.manage_addProduct['SiteErrorLog']
@@ -85,7 +85,7 @@ class TestBase(ZopeTestCase.ZopeTestCase):
         #self.has_redirected = False
 
         
-from Products.IssueTrackerProduct.Constants import UNICODE_ENCODING, DEBUG
+from IssueTrackerProduct.Constants import UNICODE_ENCODING, DEBUG
 from Globals import DevelopmentMode
 
 class CustomFieldTestCase(TestBase):
@@ -99,9 +99,10 @@ class CustomFieldTestCase(TestBase):
             title = unicode(int(10000*random.random()))
         
         tracker = self.folder.tracker
-        adder = tracker.manage_addProduct['IssueTrackerProduct'].manage_addCustomField
+        from IssueTrackerProduct.CustomField import manage_addCustomField
+        adder = manage_addCustomField
             
-        return adder(id, title, **kw)
+        return adder(tracker, id, title, **kw)
     
     
     def test_creatingCustomField(self):
@@ -111,15 +112,16 @@ class CustomFieldTestCase(TestBase):
         # if you create a custom field in a tracker with 'create_in_folder'
         # it will make sure it creates the custom field in a 
         # Custom Field Folder object.
-        adder = tracker.manage_addProduct['IssueTrackerProduct'].manage_addCustomField
-        obj = adder('xxx','title', create_in_folder=True)
+        from IssueTrackerProduct.CustomField import manage_addCustomField
+        adder = manage_addCustomField
+        obj = adder(tracker, 'xxx','title', create_in_folder=True)
         self.assertEqual(obj.getId(), 'xxx')
         self.assertEqual(obj.getTitle(), u'title')
         self.assertTrue(isinstance(obj.getTitle(), unicode))
         self.failUnless(obj.aq_parent.meta_type.endswith('Custom Field Folder'))
 
         # create another shouldn't create *another* folder
-        new_obj = adder('yyy', 'title2', create_in_folder=True)
+        new_obj = adder(tracker, 'yyy', 'title2', create_in_folder=True)
         self.failUnless(new_obj.aq_parent.absolute_url()== obj.aq_parent.absolute_url())
         
     def test_basic_rendering(self):
