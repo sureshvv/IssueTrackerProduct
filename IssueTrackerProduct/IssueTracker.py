@@ -11427,13 +11427,6 @@ class IssueTracker(IssueTrackerFolderBase, CatalogAware,
 
     def getIssueUser(self):
         """ use REQUEST to get the IssueUser object or None """
-        try:
-            user = self.acl_users.identify(self.REQUEST._auth)[0]
-            user = self.acl_users.getUserById(user)
-            user.getIssueUserPath()
-            return user
-        except:
-            return None
         user = getSecurityManager().getUser()
         try:
             user.getIssueUserPath()

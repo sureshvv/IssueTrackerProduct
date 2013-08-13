@@ -7,7 +7,7 @@
 
 __version__='0.0.8'
 
-# python
+# python mumbo
 import pytz
 # Zope
 from AccessControl import User, AuthEncoding
@@ -438,7 +438,7 @@ class IssueUserFolder(User.UserFolder):
     
     security.declareProtected(VMS, 'manage_sendReminder')
     def manage_sendReminder(self, name, email_from, email_subject,
-                            remindertext):
+                            remindertext, REQUEST=None):
         """ actually send the password reminder """
         try:
             user = self.getUser(name)
@@ -469,7 +469,6 @@ class IssueUserFolder(User.UserFolder):
             # generate a new password and save it
             password = Utils.getRandomString(length=6, loweronly=1)
             user.__ = password
-        
         else:
             password = user.__
         
@@ -488,14 +487,13 @@ class IssueUserFolder(User.UserFolder):
         else:
             body = '\r\n'.join(['From: %s'%email_from, 'To: %s'%email_to,
                                 'Subject: %s'%email_subject, "", remindertext])
-                            
             # Expect a mailhost object. Note that here we're outside the Issuetracker
             try:
                 mailhost = self.MailHost
-            except:
+            except AttributeError:
                 try:
                     mailhost = self.SecureMailHost
-                except:
+                except AttributeError:
                     try:
                         mailhost = self.superValues('MailHost')[0]
                     except IndexError:
@@ -505,8 +503,11 @@ class IssueUserFolder(User.UserFolder):
             else:
                 mailhost.send(body, email_to, email_from, email_subject)
             
-        m = "Password reminder sent to %s" % email_to
-        return self.manage_main(self, self.REQUEST, manage_tabs_message=m)
+        if REQUEST:
+            m = "Password reminder sent to %s" % email_to
+            return self.manage_main(self, REQUEST, manage_tabs_message=m)
+        else:
+            return password
 
         
         

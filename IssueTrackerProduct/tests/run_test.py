@@ -1,9 +1,9 @@
 import os.path
-import zope.testing.testrunner
+import zope.testrunner
 
 dir = os.path.dirname(__file__)
 
 if __name__ == '__main__':
-    zope.testing.testrunner.run((['--auto-color', '--auto-progress']) + [
+    zope.testrunner.run((['--auto-color', '--auto-progress']) + [
         '--test-path', dir,
         ])
