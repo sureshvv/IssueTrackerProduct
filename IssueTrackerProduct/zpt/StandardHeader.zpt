@@ -45,7 +45,7 @@ ul#tabnav a {
 
 <body>
 <div id="head">
-  <h1 class="head" tal:content="structure python:here.getRoot().title_or_id()">The Title</h1>
+  <h1 class="head"><a style="text-decoration:none;" href="/">VPlan.In:&nbsp;</a><span tal:replace="structure python:here.getRoot().title_or_id()" /></h1>
 
 <div id="topright">
 <form metal:use-macro="here/search_widget/macros/search_form"></form>
@@ -94,8 +94,6 @@ ul#tabnav a {
   <tal:block tal:repeat="menu here/getMenuItems"><a tal:attributes="href python:menu[1]; style python:test(menu[2], 'text-decoration:none')" tal:content="python:menu[0]">Home</a> <br tal:condition="not:repeat/menu/end" tal:replace="structure string:&#183;" /></tal:block>
     <br />
     <a tal:attributes="href string:${here/getRootRelativeURL}/rss.xml">RSS</a> &#183;
-    <a tal:attributes="href string:http://www.issuetrackerproduct.com?version=${here/getIssueTrackerVersion}">IssueTrackerProduct.com</a>  &#183;
-    <a tal:attributes="href string:${here/getRootRelativeURL}/About.html" class="foot" >About</a>
     <br />&nbsp;
 </div><!--/foot-->
 

@@ -6499,9 +6499,6 @@ class IssueTracker(IssueTrackerFolderBase, CatalogAware,
             url = self.absolute_url() + '/openid'
             url += '?came_from=%s' % self.absolute_url()
             self.REQUEST.RESPONSE.redirect(url)
-        else:
-            print "++++++++++++++++ auth=", self.REQUEST._auth
-            print "++++++++++++++++ cookie=", self.auth_cookie
         # Since we might be using CheckoutableTemplates and macro
         # templates are very special we are forced to do the following
         # magic to get the macro 'standard' from a potentially checked
