@@ -248,7 +248,7 @@ class IssueTrackerOpenID(CookieCrumbler):
         for parameter in parameters:
             if parameter not in qs_parsed:
                 qs_parsed[parameter] = [parameters[parameter]]
-        pprint(qs_parsed)
+        #pprint(qs_parsed)
         qs = urlencode(qs_parsed, True)
         url = url.split('?')[0] + '?' + qs
             
@@ -263,14 +263,14 @@ class IssueTrackerOpenID(CookieCrumbler):
     def authenticate(self, REQUEST):
         """called back"""
         creds = self._extractOpenIdServerResponse(REQUEST)
-        print "CREDS"
-        pprint(creds)
+        #print "CREDS"
+        #pprint(creds)
         identity = self._authenticateCredentials(creds)
         if not identity:
             return REQUEST.RESPONSE.redirect(self.absolute_url()+'/authentication_failed')
         
-        print "IDENTITY"
-        pprint(identity)
+        #print "IDENTITY"
+        #pprint(identity)
         
         email = creds.get('openid.ext1.value.email',
                         creds.get('openid.ax.value.email',
@@ -291,7 +291,7 @@ class IssueTrackerOpenID(CookieCrumbler):
                                        expires=one_year_from_now,
                                        path='/')
         if not username and email:
-            username = email.split('@')[0]
+            username = email
             
         assert username, "No username"
         
@@ -310,17 +310,20 @@ class IssueTrackerOpenID(CookieCrumbler):
         
         # Now we just need to find this user in the acl_users folder here
         found_user = self._traverse_find_user(search_context, username, email=email)
-        if not found_user and email:
-            found_user = self._traverse_find_user(search_context, None, email=email)
+        #if not found_user and email:
+        #    found_user = self._traverse_find_user(search_context, None, email=email)
         
         if found_user:
             # programmatically log in the user here
             REQUEST.set(self.name_cookie, found_user.getUserName())
             REQUEST.set(self.pw_cookie, found_user._getPassword())
+            #REQUEST._auth = None
             self.modifyRequest(REQUEST, REQUEST.RESPONSE)
         else:
-            url = self.absolute_url()+'/authentication_failed'
-            return REQUEST.RESPONSE.redirect(url + '?username=%s' % username.encode('utf8'))
+            self.REQUEST.SESSION['signon_id'] = username
+            self.REQUEST.SESSION['signon_name'] = fullname
+            url = aq_parent(aq_inner(self)).absolute_url()
+            return REQUEST.RESPONSE.redirect(url)
         
         if self.REQUEST.SESSION.get('cc_came_from'):
             url = self.REQUEST.SESSION.get('cc_came_from')
@@ -328,6 +331,8 @@ class IssueTrackerOpenID(CookieCrumbler):
             # cc_in_path is a path to a physical object
             # It needs to be turned into virtual host URL
             as_obj = self.unrestrictedTraverse(self.REQUEST.SESSION.get('cc_in_path'))
+            #as_obj.cookie_authentication.credentialsChanged(found_user.getUserName(),
+            #found_user.getUserName(), found_user._getPassword())
             url = as_obj.absolute_url()
         else:
             # desperate
